@@ -67,3 +67,6 @@ end
 
 # Use devise for authentication [https://github.com/heartcombo/devise]
 gem "devise", "~> 5.0"
+
+# Use view_component for building reusable view components [https://viewcomponent.org]
+gem "view_component", "~> 4.16"
