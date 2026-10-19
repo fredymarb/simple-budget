@@ -4,4 +4,7 @@ class ApplicationController < ActionController::Base
 
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
+
+  # Require authentication for all actions except those handled by Devise controllers.
+  before_action :authenticate_user!, unless: :devise_controller?
 end
