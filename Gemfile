@@ -64,3 +64,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# Use devise for authentication [https://github.com/heartcombo/devise]
+gem "devise", "~> 5.0"
