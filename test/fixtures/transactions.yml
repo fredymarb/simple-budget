@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  budget: one
+  account: one
+  category: one
+  date: 2026-10-19
+  kind: 1
+  amount_minor: 1
+  transfer_group_id: 
+  memo: MyString
+
+two:
+  budget: two
+  account: two
+  category: two
+  date: 2026-10-19
+  kind: 1
+  amount_minor: 1
+  transfer_group_id: 
+  memo: MyString
