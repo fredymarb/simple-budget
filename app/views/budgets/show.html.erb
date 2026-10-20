@@ -2,6 +2,9 @@
 <div class="app-shell">
   <header>
     <%= render BudgetCalenderComponent.new(month: @month) %>
+
+    <%# Sign out button%>
+    <%= button_to "Sign Out", destroy_user_session_path, method: :delete %>
   </header>
 
   <main>
