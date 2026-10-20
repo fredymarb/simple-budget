@@ -1,11 +1,7 @@
 
 <div class="app-shell">
   <header>
-    <div class="budget-month">
-      <span class="previous-month"> < </span> 
-      <span>Month: <%= @month.strftime("%B %Y") %></span>
-      <span class="next-month"> > </span>
-    </div>
+    <%= render BudgetCalenderComponent.new(month: @month) %>
   </header>
 
   <main>
