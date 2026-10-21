@@ -8,7 +8,29 @@
   </header>
 
   <main>
-    <h1>Budgets show page!</h1>
+    <% start_of_month = @month.beginning_of_month %>
+    <% end_of_month = @month.end_of_month %>
+
+    <h2>Summary</h2>
+    <p>Total Balance: <%= number_to_currency(@total_balance) %></p>
+    <p>Total Income: <%= number_to_currency(@monthly_income) %></p>
+    <p>Total Expenses: <%= number_to_currency(@monthly_expenses) %></p>
+
+    <h2>Income</h2>
+    <ul>
+      <% @income_categories.each do |category| %>
+        <li><%= category.name %>:=> <%= number_to_currency(category.transactions.where(kind: "income", date: start_of_month..end_of_month).sum(:amount_minor)) %></li>
+      <% end %>
+    </ul>
+
+    <h2>Expenses</h2>
+    <ul>
+      <% @expense_categories.each do |category| %>
+        <li><%= category.name %>:=> <%= number_to_currency(category.transactions.where(kind: "expense", date: start_of_month..end_of_month).sum(:amount_minor)) %></li>
+      <% end %>
+    </ul>
+
+    <%# button_to "Add Transaction", new_budget_transaction_path(@budget), method: :get %>
   </main>
 
   <footer>
