@@ -1,0 +1,37 @@
+<div class="app-shell">
+  <header>
+    <%# TODO: Fix this component's navigation buttons to take user 
+      # to transactions monthly page, instead of to budget's monthly page 
+    %>
+    <%= render BudgetCalenderComponent.new(month: @month) %>
+  </header>
+
+  <main>
+    <h1>All Transactions</h1>
+
+    <ul>
+      <% @monthly_transactions.group_by(&:date).each do |date, transactions| %>
+        <li>
+          <%# format date as "Month Day, Year" %>
+          <strong><%= date.strftime("%B %d, %Y") %></strong>
+          <ul>
+            <% transactions.each do |transaction| %>
+              <li>
+                <a href="<%= edit_transaction_path(transaction) %>">
+                  [<%= transaction.category.name %> : <%= transaction.amount_minor %>]
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="<%= root_path %>">Home</a>
+    <a href="#">Insights</a>
+    <a href="<%= transactions_path(month: @month.strftime("%Y-%m")) %>">Transactions</a>
+    <a href="#">Accounts</a>
+  </footer>
+</div>

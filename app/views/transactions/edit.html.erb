@@ -1,0 +1,44 @@
+<h1>Edit Transaction</h1>
+
+<%= form_with(model: @transaction, local: true) do |form| %>
+  <div>
+    <%= form.label :kind %>
+    <%= form.select :kind, [["Income", "income"], ["Expense", "expense"], ["Transfer", "transfer"]] %>
+  </div>
+
+  <div>
+    <%= form.label :amount_minor %>
+    <%= form.number_field :amount_minor %>
+  </div>
+
+  <%# User selects account which the transaction is being made %>
+  <div>
+    <%= form.label :account_id, "Account" %>
+    <%= form.collection_select :account_id, @accounts, :id, :name, 
+        {prompt: "Select an account"},
+        {required: true}
+    %>
+  </div>
+
+  <div>
+    <%= form.label :category_id, "Category" %>
+    <%= form.collection_select :category_id, @categories, :id, :name, 
+        {prompt: "Select a category"},
+        {required: true}
+    %>
+  </div>
+
+  <div>
+    <%= form.label :date %>
+    <%= form.date_field :date %>
+  </div>
+
+  <div>
+    <%= form.label :memo %>
+    <%= form.text_field :memo %>
+  </div>
+
+  <div>
+    <%= form.submit "Create Transaction" %>
+  </div>
+<% end %>
