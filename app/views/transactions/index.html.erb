@@ -29,9 +29,6 @@
   </main>
 
   <footer>
-    <a href="<%= root_path %>">Home</a>
-    <a href="#">Insights</a>
-    <a href="<%= transactions_path(month: @month.strftime("%Y-%m")) %>">Transactions</a>
-    <a href="#">Accounts</a>
+    <%= render BottomNavigationComponent.new(month: @month) %>
   </footer>
 </div>
