@@ -4,7 +4,10 @@ class TransactionsController < ApplicationController
 
   def index
     @month = month_params(params[:month])
-    @transactions = @budget.transactions
+    @monthly_transactions = @budget
+      .transactions
+      .where(date: @month.beginning_of_month..@month.end_of_month)
+      .includes(:category)
   end
 
   def show
@@ -49,8 +52,9 @@ class TransactionsController < ApplicationController
 
   private
 
-  def month_params
-    Date.strptime(params[:month], "%Y-%m")
+  # TODO: Refactor into a helper or service for handling month parameters
+  def month_params(value)
+    Date.strptime("#{value}-01", "%Y-%m")
   rescue ArgumentError, TypeError
     Date.today.beginning_of_month
   end
