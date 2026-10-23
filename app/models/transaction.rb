@@ -3,6 +3,8 @@ class Transaction < ApplicationRecord
   belongs_to :account
   belongs_to :category, optional: true
 
+  scope :order_by_date_desc, -> { order(date: :desc, id: :desc) }
+
   enum :kind, { starting_balance: 0, income: 1, expense: 2, transfer: 3 }
 
   validates :kind, presence: true

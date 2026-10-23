@@ -6,6 +6,7 @@ class TransactionsController < ApplicationController
     @month = month_params(params[:month])
     @monthly_transactions = @budget
       .transactions
+      .order_by_date_desc
       .where(date: @month.beginning_of_month..@month.end_of_month)
       .includes(:category)
   end
