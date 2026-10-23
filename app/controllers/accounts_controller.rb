@@ -3,7 +3,10 @@ class AccountsController < ApplicationController
   before_action :set_account, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @accounts = @budget.accounts
+    @accounts = @budget.accounts.includes(:transactions)
+
+    # Account doesn't need @month but the BottomNavigationComponent does, so we keep it here for consistency
+    @month = month_param(params[:month])
   end
 
   def show
@@ -16,8 +19,9 @@ class AccountsController < ApplicationController
   def create
     @account = @budget.accounts.new(account_params)
     if @account.save
-      redirect_to accounts_path, notice: "Account was successfully created."
+      redirect_to accounts_path(month: @month), notice: "Account was successfully created."
     else
+      @month = month_param(params[:month])
       render :new
     end
   end
@@ -27,18 +31,25 @@ class AccountsController < ApplicationController
 
   def update
     if @account.update(account_params)
-      redirect_to accounts_path, notice: "Account was successfully updated."
+      redirect_to accounts_path(month: @month), notice: "Account was successfully updated."
     else
+      @month = month_param(params[:month])
       render :edit
     end
   end
 
   def destroy
     @account.destroy
-    redirect_to accounts_path, notice: "Account was successfully destroyed."
+    redirect_to accounts_path(month: @month), notice: "Account was successfully destroyed."
   end
 
   private
+
+  def month_param(value)
+    Date.strptime("#{value}-01", "%Y-%m")
+  rescue ArgumentError, TypeError
+    Date.today.beginning_of_month
+  end
 
   def set_budget
     @budget = current_user.budget
@@ -49,6 +60,6 @@ class AccountsController < ApplicationController
   end
 
   def account_params
-    params.require(:account).permit(:name)
+    params.require(:account).permit(:month, :name)
   end
 end
