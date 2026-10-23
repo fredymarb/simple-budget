@@ -1,5 +1,11 @@
 module Money
   include ActionView::Helpers::NumberHelper
+  CURRENCIES = {
+    "USD" => "$",
+    "GBP" => "£",
+    "GHS" => "GH₵",
+    "JPY" => "Y"
+  }
 
   EXPONENTS = Hash.new(2).merge(
     "JPY" => 0, "KRW" => 0, "VND" => 0, "CLP" => 0,
@@ -19,7 +25,6 @@ module Money
 
     minor
   end
-
 
   def minor_to_decimal(minor, exponent:)
     sign = minor.negative? ? "-" : ""
