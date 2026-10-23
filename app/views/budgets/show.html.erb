@@ -29,7 +29,7 @@
     <ul>
       <% @expense_by_category.each do |(_id, category_name, _kind), amount| %>
         <li>
-          <%= category_name %>: <%= number_to_currency(amount) %>
+          <%= category_name %>: <%= number_to_currency(amount.abs) %>
         </li>
       <% end %>
     </ul>
