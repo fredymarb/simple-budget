@@ -5,7 +5,7 @@
 <main>
   <ul>
     <% @accounts.each do |account| %>
-      <li><%= account.name %>: <%= currency_symbol %><%= Money.minor_to_decimal(account.transactions.sum(:amount_minor), exponent: Money::EXPONENTS["USD"]) %></li>
+      <li><%= account.name %>: <%= display_money(account.transactions.sum(:amount_minor)) %></li>
     <% end %>
   </ul>
 </main>

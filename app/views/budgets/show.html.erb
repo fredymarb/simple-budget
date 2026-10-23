@@ -10,16 +10,16 @@
   <main>
     <h2>Summary</h2>
 
-    <p>Total Balance: <%= currency_symbol %><%= Money.minor_to_decimal(@total_balance, exponent: Money::EXPONENTS["USD"]) %></p>
-    <p>Total Income: <%= currency_symbol %><%= Money.minor_to_decimal(@monthly_income, exponent: Money::EXPONENTS["USD"]) %></p>
-    <p>Total Expenses: <%= currency_symbol %><%= Money.minor_to_decimal(@monthly_expenses, exponent: Money::EXPONENTS["USD"]) %></p>
+    <p>Total Balance: <%= display_money(@total_balance) %></p>
+    <p>Total Income: <%= display_money(@monthly_income) %></p>
+    <p>Total Expenses: <%= display_money(@monthly_expenses) %></p>
 
     <h2>Income</h2>
 
     <ul>
       <% @income_by_category.each do |(_id, category_name, _kind), amount| %>
         <li>
-          <%= category_name %>: <%= currency_symbol %><%= Money.minor_to_decimal(amount, exponent: Money::EXPONENTS["USD"]) %>
+          <%= category_name %>: <%= display_money(amount) %>
         </li>
       <% end %>
     </ul>
@@ -29,7 +29,7 @@
     <ul>
       <% @expense_by_category.each do |(_id, category_name, _kind), amount| %>
         <li>
-          <%= category_name %>: <%= currency_symbol %><%= Money.minor_to_decimal(amount.abs, exponent: Money::EXPONENTS["USD"]) %>
+          <%= category_name %>: <%= display_money(amount.abs) %>
         </li>
       <% end %>
     </ul>

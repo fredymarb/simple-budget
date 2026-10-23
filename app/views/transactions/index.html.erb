@@ -18,7 +18,7 @@
             <% transactions.each do |transaction| %>
               <li>
                 <a href="<%= edit_transaction_path(transaction) %>">
-                  [<%= transaction.category.name %> : <%= currency_symbol %><%= Money.minor_to_decimal(transaction.amount_minor, exponent: Money::EXPONENTS["USD"]) %>]
+                  [<%= transaction.category.name %> : <%= display_money(transaction.amount_minor) %>]
                 </a>
               </li>
             <% end %>
