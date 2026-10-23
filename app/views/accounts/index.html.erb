@@ -1,0 +1,15 @@
+<header>
+    <h1>All Accounts</h1>
+</header>
+
+<main>
+    <ul>
+      <% @accounts.each do |account| %>
+        <li><%= account.name %>: <%= account.transactions.sum(:amount_minor) %></li>
+      <% end %>
+    </ul>
+</main>
+
+<footer>
+    <%= render BottomNavigationComponent.new(month: @month) %>
+</footer>

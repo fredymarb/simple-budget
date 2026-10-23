@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resource :budget, only: [ :show ]
   resources :transactions
+  resources :accounts
 
   root "budgets#show"
 end
