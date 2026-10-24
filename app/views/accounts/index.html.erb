@@ -5,9 +5,13 @@
 <main>
   <ul>
     <% @accounts.each do |account| %>
-      <li><%= account.name %>: <%= display_money(account.transactions.sum(:amount_minor)) %></li>
+      <li>
+        <%= account.name %>: <%= display_money(account.transactions.sum(:amount_minor)) %>
+      </li>
     <% end %>
   </ul>
+
+  <%= link_to "Create New Account", new_account_path %>
 </main>
 
 <footer>
