@@ -1,0 +1,12 @@
+<h1>Edit Account Page</h1>
+
+<%= form_with model: @account, local: true do |form| %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.submit "Edit Account" %>
+  </div>
+<% end %>
