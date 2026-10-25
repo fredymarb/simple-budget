@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# Component for rendering a budget calendar with navigation between months
 class BudgetCalenderComponent < ViewComponent::Base
   attr_reader :month
 
@@ -8,7 +7,6 @@ class BudgetCalenderComponent < ViewComponent::Base
     @month = month.beginning_of_month
   end
 
-  # Returns the label for the current month in "Month Year" format, e.g., "January 2024"
   def label
     month.strftime("%B %Y")
   end
@@ -20,7 +18,6 @@ class BudgetCalenderComponent < ViewComponent::Base
   def next_month_url
     month_url(month.next_month)
   end
-
 
   private
 
