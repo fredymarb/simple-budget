@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @month = month_params(params[:month])
+    @month = month_param(params[:month])
     @monthly_transactions = @budget
       .transactions
       .where(date: @month.beginning_of_month..@month.end_of_month)
@@ -52,13 +52,6 @@ class TransactionsController < ApplicationController
   end
 
   private
-
-  # TODO: Refactor into a helper or service for handling month parameters
-  def month_params(value)
-    Date.strptime("#{value}-01", "%Y-%m")
-  rescue ArgumentError, TypeError
-    Date.today.beginning_of_month
-  end
 
   def set_budget
     @budget = current_user.budget

@@ -58,13 +58,6 @@ class BudgetsController < ApplicationController
 
   private
 
-  # TODO: Refactor into a helper or service for handling month parameters
-  def month_param(value)
-    Date.strptime("#{value}-01", "%Y-%m")
-  rescue ArgumentError, TypeError
-    Date.today.beginning_of_month
-  end
-
   def set_budget
     @budget = current_user.budget
   end

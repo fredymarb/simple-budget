@@ -7,4 +7,12 @@ class ApplicationController < ActionController::Base
 
   # Require authentication for all actions except those handled by Devise controllers.
   before_action :authenticate_user!, unless: :devise_controller?
+
+  private
+
+  def month_param(value)
+    Date.strptime("#{value}-01", "%Y-%m")
+  rescue ArgumentError, TypeError
+    Date.today.beginning_of_month
+  end
 end
