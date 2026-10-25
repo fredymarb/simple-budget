@@ -13,13 +13,22 @@ class BudgetCalenderComponent < ViewComponent::Base
     month.strftime("%B %Y")
   end
 
-  # Returns the URL for the previous month's budget page
   def previous_month_url
-    helpers.budget_path(month: month.prev_month.strftime("%Y-%m"))
+    month_url(month.prev_month)
   end
 
-  # Returns the URL for the next month's budget page
   def next_month_url
-    helpers.budget_path(month: month.next_month.strftime("%Y-%m"))
+    month_url(month.next_month)
+  end
+
+
+  private
+
+  def month_url(date)
+    request_path = helpers.request.path
+    query_params = helpers.request.query_parameters.merge(
+      "month" => date.strftime("%Y-%m")
+    )
+    "#{request_path}?#{query_params.to_query}"
   end
 end
