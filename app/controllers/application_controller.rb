@@ -10,8 +10,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def month_param(value)
-    Date.strptime("#{value}-01", "%Y-%m")
+  def parse_month_param(year_month)
+    Date.strptime("#{year_month}-01", "%Y-%m")
   rescue ArgumentError, TypeError
     Date.today.beginning_of_month
   end

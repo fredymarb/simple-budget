@@ -6,7 +6,7 @@ class AccountsController < ApplicationController
     @accounts = @budget.accounts.includes(:transactions)
 
     # Account doesn't need @month but the BottomNavigationComponent does, so we keep it here for consistency
-    @month = month_param(params[:month])
+    @month = parse_month_param(params[:month])
   end
 
   def show
@@ -21,7 +21,7 @@ class AccountsController < ApplicationController
     if @account.save
       redirect_to accounts_path(month: @month), notice: "Account was successfully created."
     else
-      @month = month_param(params[:month])
+      @month = parse_month_param(params[:month])
       render :new
     end
   end
@@ -33,7 +33,7 @@ class AccountsController < ApplicationController
     if @account.update(account_params)
       redirect_to accounts_path(month: @month), notice: "Account was successfully updated."
     else
-      @month = month_param(params[:month])
+      @month = parse_month_param(params[:month])
       render :edit
     end
   end

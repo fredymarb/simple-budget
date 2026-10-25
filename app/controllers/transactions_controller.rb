@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @month = month_param(params[:month])
+    @month = parse_month_param(params[:month])
     @monthly_transactions = @budget
       .transactions
       .where(date: @month.beginning_of_month..@month.end_of_month)

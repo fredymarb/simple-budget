@@ -2,7 +2,7 @@ class BudgetsController < ApplicationController
   before_action :set_budget, only: [ :show ]
 
   def show
-    @month = month_param(params[:month])
+    @month = parse_month_param(params[:month])
     month_range = @month.beginning_of_month..@month.end_of_month
 
     transactions = @budget.transactions
