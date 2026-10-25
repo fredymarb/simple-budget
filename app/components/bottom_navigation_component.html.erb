@@ -1,6 +1,6 @@
 <div class="bottom-navigation">
-  <a href="<%= budget_path(month: month) %>">Home</a>
-  <a href="#">Insights</a>
-  <a href="<%= transactions_path(month: month) %>">Transactions</a>
-  <a href="<%= accounts_path(month: month) %>">Accounts</a>
+  <%= link_to "Home", budget_path(month: month) %>
+  <%= link_to "Insights", "#" %>
+  <%= link_to "Transactions", transactions_path(month: month) %>
+  <%= link_to "Accounts", accounts_path(month: month) %>
 </div>
