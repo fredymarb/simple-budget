@@ -12,7 +12,7 @@
 
     <p>Total Balance: <%= display_money(@total_balance) %></p>
     <p>Total Income: <%= display_money(@monthly_income) %></p>
-    <p>Total Expenses: <%= display_money(@monthly_expenses) %></p>
+    <p>Total Expenses: <%= display_money(@monthly_expenses.abs) %></p>
 
     <h2>Income</h2>
 
