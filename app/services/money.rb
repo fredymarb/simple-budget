@@ -15,7 +15,7 @@ module Money
     "OMR" => "ر.ع",
     "JOD" => "د.ا",
     "TND" => "د.ت"
-  }
+  }.freeze
 
   EXPONENTS = Hash.new(2).merge(
     "JPY" => 0, "KRW" => 0, "VND" => 0, "CLP" => 0,
