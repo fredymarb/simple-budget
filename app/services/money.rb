@@ -2,14 +2,24 @@ module Money
   include ActionView::Helpers::NumberHelper
   CURRENCIES = {
     "USD" => "$",
+    "CAD" => "$",
+    "EUR" => "€",
     "GBP" => "£",
     "GHS" => "GH₵",
-    "JPY" => "Y"
+    "JPY" => "¥",
+    "KRW" => "₩",
+    "VND" => "₫",
+    "CLP" => "$",
+    "KWD" => "د.ك",
+    "BHD" => "ب.د",
+    "OMR" => "ر.ع",
+    "JOD" => "د.ا",
+    "TND" => "د.ت"
   }
 
   EXPONENTS = Hash.new(2).merge(
     "JPY" => 0, "KRW" => 0, "VND" => 0, "CLP" => 0,
-    "KWD" => 3, "BHD" => 3, "OMR" => 3, "JOD" => 3, "TND" => 3
+    "KWD" => 3, "BHD" => 3, "OMR" => 3, "JOD" => 3, "TND" => 3,
   ).freeze
 
   MAX_MINOR = 10**14
