@@ -1,6 +1,6 @@
 <h1>New Transaction</h1>
 
-<%= form_with(model: @transaction, local: true) do |form| %>
+<%= form_with model: @transaction do |form| %>
   <div>
     <%= form.label :kind %>
     <%= form.select :kind, [["Income", "income"], ["Expense", "expense"], ["Transfer", "transfer"]] %>
