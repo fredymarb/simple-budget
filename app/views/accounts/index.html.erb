@@ -7,7 +7,7 @@
     <% @accounts.each do |account| %>
       <li>
         <a href="<%= edit_account_path(account) %>">
-          <%= account.name %>: <%= display_money(account.transactions.sum(:amount_minor)) %>
+          <%= account.name %>: <%= display_money(account.transactions.sum(&:amount_minor)) %>
         </a>
       </li>
     <% end %>
