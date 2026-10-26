@@ -10,7 +10,7 @@ class BudgetSummary
     {
       total_balance: total_balance,
       monthly_income: monthly_income,
-      monthly_expenses: monthly_expenses,
+      monthly_expense: monthly_expense,
       income_by_category: income_by_category,
       expense_by_category: expense_by_category
     }
@@ -41,7 +41,7 @@ class BudgetSummary
     monthly_totals.fetch("income", 0)
   end
 
-  def monthly_expenses
+  def monthly_expense
     monthly_totals.fetch("expense", 0)
   end
 

@@ -8,7 +8,7 @@ class BudgetsController < ApplicationController
 
     @total_balance = summary[:total_balance]
     @monthly_income = summary[:monthly_income]
-    @monthly_expenses = summary[:monthly_expenses]
+    @monthly_expense = summary[:monthly_expense]
     @income_by_category = summary[:income_by_category]
     @expense_by_category = summary[:expense_by_category]
   end
