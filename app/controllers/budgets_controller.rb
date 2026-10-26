@@ -3,47 +3,14 @@ class BudgetsController < ApplicationController
 
   def show
     @month = parse_month_param(params[:month])
-    month_range = @month.beginning_of_month..@month.end_of_month
 
-    transactions = @budget.transactions
+    summary = BudgetSummary.new(@budget, @month).call
 
-    # Total balance across all transactions.
-    @total_balance = transactions.sum(:amount_minor)
-
-    # Calculate monthly income and expenses in one query.
-    monthly_totals = transactions
-      .where(date: month_range)
-      .group(:kind)
-      .sum(:amount_minor)
-
-    @monthly_income = monthly_totals.fetch("income", 0)
-    @monthly_expenses = monthly_totals.fetch("expense", 0)
-
-    # Calculate totals for every category and transaction kind
-    # in a single query.
-    category_totals = @budget.categories
-      .joins(:transactions)
-      .where(
-        transactions: {
-          date: month_range,
-          kind: %w[income expense]
-        }
-      )
-      .group(
-        "categories.id",
-        "categories.name",
-        "transactions.kind"
-      )
-      .sum("transactions.amount_minor")
-
-    # Separate the results in Ruby, without additional SQL queries.
-    @income_by_category = category_totals.select do |(_id, _name, kind), _amount|
-      kind == "income"
-    end
-
-    @expense_by_category = category_totals.select do |(_id, _name, kind), _amount|
-      kind == "expense"
-    end
+    @total_balance = summary[:total_balance]
+    @monthly_income = summary[:monthly_income]
+    @monthly_expenses = summary[:monthly_expenses]
+    @income_by_category = summary[:income_by_category]
+    @expense_by_category = summary[:expense_by_category]
   end
 
   private
