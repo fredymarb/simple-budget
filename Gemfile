@@ -69,4 +69,4 @@ end
 gem "devise", "~> 5.0"
 
 # Use view_component for building reusable view components [https://viewcomponent.org]
-gem "view_component", "~> 4.16"
+gem "view_component", "~> 4.19"
