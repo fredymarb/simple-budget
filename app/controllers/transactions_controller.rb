@@ -22,8 +22,9 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = @budget.transactions.new(transaction_params)
+    @month = parse_month_param(params[:month])
     if @transaction.save
-      redirect_to transactions_path(month: @month)
+      redirect_to transactions_path(month: @month), notice: "Transaction was successfully created."
     else
       @accounts = @budget.accounts
       @categories = @budget.categories
@@ -38,7 +39,7 @@ class TransactionsController < ApplicationController
 
   def update
     if @transaction.update(transaction_params)
-      redirect_to transactions_path(@budget)
+      redirect_to transactions_path(month: @month), notice: "Transaction was successfully updated."
     else
       @accounts = @budget.accounts
       @categories = @budget.categories
@@ -48,7 +49,7 @@ class TransactionsController < ApplicationController
 
   def destroy
     @transaction.destroy
-    redirect_to budget_transactions_path(@budget)
+    redirect_to transactions_path(month: @month), notice: "Transaction was successfully deleted."
   end
 
   private
@@ -59,6 +60,6 @@ class TransactionsController < ApplicationController
 
   def transaction_params
     params.require(:transaction)
-      .permit(:month, :amount_minor, :kind, :date, :memo, :account_id, :category_id)
+      .permit(:amount_minor, :kind, :date, :memo, :account_id, :category_id)
   end
 end
