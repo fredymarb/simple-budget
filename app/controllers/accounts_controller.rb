@@ -1,13 +1,10 @@
 class AccountsController < ApplicationController
   before_action :set_budget
-  before_action :set_account, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_account, only: [ :edit, :update, :destroy ]
 
   def index
     @month = parse_month_param(params[:month])
     @accounts = @budget.accounts.includes(:transactions)
-  end
-
-  def show
   end
 
   def new
