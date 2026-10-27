@@ -23,7 +23,7 @@ class TransactionsController < ApplicationController
   def create
     @transaction = @budget.transactions.new(transaction_params)
     if @transaction.save
-      redirect_to transactions_path
+      redirect_to transactions_path(month: @month)
     else
       @accounts = @budget.accounts
       @categories = @budget.categories
@@ -53,16 +53,12 @@ class TransactionsController < ApplicationController
 
   private
 
-  def set_budget
-    @budget = current_user.budget
-  end
-
   def set_transaction
     @transaction = @budget.transactions.find(params[:id])
   end
 
   def transaction_params
     params.require(:transaction)
-      .permit(:month, :amount_minor, :kind, :date, :memo, :transfer_group_id, :account_id, :category_id)
+      .permit(:month, :amount_minor, :kind, :date, :memo, :account_id, :category_id)
   end
 end

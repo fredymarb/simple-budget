@@ -15,10 +15,6 @@ class BudgetsController < ApplicationController
 
   private
 
-  def set_budget
-    @budget = current_user.budget
-  end
-
   def budget_params
     params.require(:budget).permit(:month)
   end

@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def set_budget
+    @budget = current_user.budget
+  end
+
   def parse_month_param(year_month)
     Date.strptime("#{year_month}-01", "%Y-%m")
   rescue ArgumentError, TypeError

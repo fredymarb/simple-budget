@@ -3,10 +3,8 @@ class AccountsController < ApplicationController
   before_action :set_account, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @accounts = @budget.accounts.includes(:transactions)
-
-    # Account doesn't need @month but the BottomNavigationComponent does, so we keep it here for consistency
     @month = parse_month_param(params[:month])
+    @accounts = @budget.accounts.includes(:transactions)
   end
 
   def show
@@ -44,10 +42,6 @@ class AccountsController < ApplicationController
   end
 
   private
-
-  def set_budget
-    @budget = current_user.budget
-  end
 
   def set_account
     @account = @budget.accounts.find(params[:id])
