@@ -14,23 +14,6 @@ class User < ApplicationRecord
   private
 
   def set_default_budget
-    categories = [
-      "Eating Out", "Groceries", "Entertainment", "E-cash",
-      "Gift", "Grooming", "Gym", "Internet", "Miscellaneous",
-      "Phone", "Rent", "Salary", "Savings", "Transport", "Utilities"
-    ]
-
-    ActiveRecord::Base.transaction do
-      # Create a default budget for the current user
-      default_budget = create_budget!(name: "My Budget", currency: "USD")
-
-      # Create default account for the new budget
-      default_budget.accounts.create!(name: "Default")
-
-      # Create default categories for the new budget
-      categories.each do |category|
-        default_budget.categories.create!(name: category)
-      end
-    end
+    Budgets::CreateDefault.call(user: self)
   end
 end
