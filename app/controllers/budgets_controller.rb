@@ -4,7 +4,7 @@ class BudgetsController < ApplicationController
   def show
     @month = parse_month_param(params[:month])
 
-    summary = BudgetSummary.new(@budget, @month).call
+    summary = Budgets::Summary.new(@budget, @month).call
 
     @total_balance = summary[:total_balance]
     @monthly_income = summary[:monthly_income]
