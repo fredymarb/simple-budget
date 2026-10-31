@@ -55,6 +55,12 @@ group :development, :test do
 
   # Testing framework for Rails [https://rspec.info]
   gem "rspec-rails", require: false
+
+  # Factory and test data generation for RSpec tests [https://github.com/thoughtbot/factory_bot]
+  gem "factory_bot_rails"
+
+  # Fake data generation for RSpec tests [https://github.com/faker-ruby/faker]
+  gem "faker"
 end
 
 group :development do
