@@ -104,6 +104,22 @@ RSpec.describe "Transactions", type: :request do
 
       expect(response).to have_http_status(:unprocessable_content)
     end
+
+    it "rejects a non-scalar account id" do
+      expect {
+        post transactions_path, params: {
+          transaction: {
+            kind: "income",
+            account_id: { id: source_account.id },
+            category_id: category.id,
+            amount_minor: "5000",
+            date: "2026-10-25"
+          }
+        }
+      }.not_to change { budget.transactions.count }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
   end
 
   describe "GET /transactions" do

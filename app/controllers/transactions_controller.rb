@@ -38,8 +38,15 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_params
-    params.require(:transaction)
-      .permit(:amount_minor, :kind, :date, :memo, :account_id, :category_id, :source_account_id, :destination_account_id)
+    submitted = params.require(:transaction)
+    attributes = submitted.permit(:amount_minor, :kind, :date, :memo).to_h.symbolize_keys
+
+    [ :account_id, :category_id, :source_account_id, :destination_account_id ].each do |key|
+      value = submitted[key]
+      attributes[key] = value if value.is_a?(String) || value.is_a?(Numeric)
+    end
+
+    attributes
   end
 
   def save(transaction, template:)
