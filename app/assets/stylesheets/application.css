@@ -644,6 +644,18 @@ h2 {
   margin: 0.25rem 0 0.25rem;
 }
 
+.home-heading {
+  align-items: center;
+}
+
+.add-transaction-link {
+  flex: 0 0 auto;
+  min-height: 46px;
+  padding-inline: 1rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgb(44 128 88 / 18%);
+}
+
 .eyebrow {
   margin: 0 0 0.3rem;
   color: var(--muted);
@@ -1015,6 +1027,12 @@ h2 {
 
   .page-heading {
     align-items: center;
+  }
+
+  .add-transaction-link {
+    min-height: 42px;
+    padding-inline: 0.75rem;
+    font-size: 0.78rem;
   }
 
   .period-badge {

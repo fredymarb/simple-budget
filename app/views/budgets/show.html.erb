@@ -4,6 +4,14 @@
 </header>
 
 <main>
+  <div class="page-heading home-heading">
+    <div>
+      <p class="eyebrow">YOUR MONTH AT A GLANCE</p>
+      <h1>Home</h1>
+    </div>
+    <%= link_to "+ Add transaction", new_transaction_path(month: @month.strftime("%Y-%m")), class: "button add-transaction-link" %>
+  </div>
+
   <section class="card stat-row">
     <div class="stat">
       <span class="label">Total Balance</span>
@@ -51,8 +59,6 @@
     <% end %>
   </section>
 </main>
-
-<%= link_to "+", new_transaction_path, class: "fab", "aria-label": "Add transaction" %>
 
 <footer>
   <%= render BottomNavigationComponent.new(month: @month) %>
