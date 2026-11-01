@@ -97,7 +97,13 @@ ul {
   max-width: 560px;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: 1.1rem 1.1rem calc(var(--nav-height) + 5rem);
+  padding: 1.1rem 1.1rem 0;
+}
+
+.app-shell:not(.auth) {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .app-shell > header {
@@ -113,6 +119,16 @@ ul {
   flex-direction: column;
   gap: 1rem;
   flex: 1;
+  min-height: 0;
+}
+
+.app-shell:not(.auth) > main {
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding-bottom: 5rem;
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
 }
 
 .page-title {
@@ -452,13 +468,9 @@ input[type="checkbox"] {
 /* ---------- Bottom navigation ---------- */
 
 .app-shell > footer {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
+  flex: 0 0 auto;
+  margin: 0 -1.1rem;
   background: color-mix(in srgb, var(--surface) 94%, transparent);
-  backdrop-filter: blur(14px);
   border-top: 1px solid var(--border);
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -551,6 +563,7 @@ input[type="checkbox"] {
   }
 
   .app-shell:not(.auth) {
+    height: calc(100dvh - 2rem);
     min-height: calc(100dvh - 2rem);
     border: 1px solid var(--border);
     border-radius: 28px;
@@ -558,11 +571,7 @@ input[type="checkbox"] {
   }
 
   .app-shell > footer {
-    bottom: 1rem;
-    width: min(558px, calc(100% - 2px));
-    margin: 0 auto;
-    border-right: 1px solid var(--border);
-    border-left: 1px solid var(--border);
+    margin-bottom: -1px;
     border-radius: 0 0 27px 27px;
   }
 }
