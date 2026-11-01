@@ -7,27 +7,11 @@
     <h1>All Transactions</h1>
 
     <ul>
-      <% @monthly_transactions.group_by(&:date).each do |date, transactions| %>
+      <% @transactions_by_date.each do |date, entries| %>
         <li>
           <strong><%= date.strftime("%B %d, %Y") %></strong>
           <ul>
-            <% transactions.each do |transaction| %>
-              <% next if transaction.transfer? && transaction.amount_minor.positive? %>
-              <li>
-                <% if transaction.transfer? %>
-                  <% accounts = @transfer_accounts[transaction.transfer_group_id] || {} %>
-                  <%= link_to edit_transaction_path(transaction) do %>
-                    Transfer: <%= accounts[:source] || transaction.account.name %> →
-                    <%= accounts[:destination] || "Unknown account" %>
-                    (<%= display_money(transaction.amount_minor.abs) %>)
-                  <% end %>
-                <% else %>
-                  <%= link_to edit_transaction_path(transaction) do %>
-                    <%= transaction.category.name %>: <%= display_money(transaction.amount_minor) %>
-                  <% end %>
-                <% end %>
-              </li>
-            <% end %>
+            <%= render TransactionListItemComponent.with_collection(entries) %>
           </ul>
         </li>
       <% end %>

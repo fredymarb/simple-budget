@@ -125,6 +125,27 @@ RSpec.describe "Transactions", type: :request do
     end
   end
 
+  describe "GET /transactions/:id/edit" do
+    it "preselects both accounts of a transfer and fixes its kind" do
+      source_account
+      destination_account
+      outgoing, = Transfers::Create.new(
+        source_account: source_account,
+        destination_account: destination_account,
+        amount_minor: 1500,
+        date: Date.new(2026, 10, 20)
+      ).call
+
+      get edit_transaction_path(outgoing)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("<strong>Type:</strong> Transfer")
+      expect(response.body).to match(/<option selected="selected" value="#{source_account.id}">Checking/)
+      expect(response.body).to match(/<option selected="selected" value="#{destination_account.id}">Savings/)
+      expect(response.body).to include('value="1500"')
+    end
+  end
+
   describe "PATCH /transactions/:id" do
     it "updates both sides when editing a transfer's accounts" do
       source_account

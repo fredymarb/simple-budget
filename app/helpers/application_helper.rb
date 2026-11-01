@@ -1,6 +1,4 @@
 module ApplicationHelper
-  module_function
-
   def currency_name
     current_user.budget.currency
   end

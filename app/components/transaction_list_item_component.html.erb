@@ -1,0 +1,9 @@
+<li>
+  <%= link_to edit_transaction_path(transaction) do %>
+    <% if transfer? %>
+      <%= label %> (<%= amount %>)
+    <% else %>
+      <%= label %>: <%= amount %>
+    <% end %>
+  <% end %>
+</li>
