@@ -3,10 +3,15 @@
 </header>
 
 <main>
-  <h1>Insights</h1>
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">YOUR MONEY, IN FOCUS</p>
+      <h1>Insights</h1>
+    </div>
+    <span class="period-badge"><%= @month.strftime("%B %Y") %></span>
+  </div>
 
-  <!-- Current Month Summary -->
-  <section class="card stat-row">
+  <section class="card stat-row insights-summary" aria-label="This month's summary">
     <div class="stat">
       <span class="label">Income</span>
       <strong class="amount income"><%= display_money(@insights[:current_month_summary][:income]) %></strong>
@@ -17,12 +22,11 @@
     </div>
     <div class="stat">
       <span class="label">Net</span>
-      <strong class="amount"><%= display_money(@insights[:current_month_summary][:net]) %></strong>
+      <strong class="amount <%= @insights[:current_month_summary][:net].negative? ? "expense" : "income" %>"><%= display_money(@insights[:current_month_summary][:net]) %></strong>
     </div>
   </section>
 
-  <!-- Averages and Savings Rate -->
-  <section class="card stat-row">
+  <section class="card stat-row averages-summary" aria-label="Monthly averages">
     <div class="stat">
       <span class="label">Avg Monthly Income</span>
       <strong class="amount income"><%= display_money(@insights[:average_monthly_income]) %></strong>
@@ -37,15 +41,25 @@
     </div>
   </section>
 
-  <!-- Monthly Trends -->
-  <section class="card">
-    <h2>12-Month Trends</h2>
+  <section class="card trend-card">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">THE BIG PICTURE</p>
+        <h2>12-month trends</h2>
+      </div>
+      <span class="chart-legend"><i class="legend-income"></i>Income <i class="legend-expense"></i>Expenses</span>
+    </div>
     <% if @insights[:monthly_trends].any? %>
-      <ul class="breakdown">
+      <% trend_max = @insights[:monthly_trends].flat_map { |trend| [ trend[:income].abs, trend[:expense].abs ] }.max || 0 %>
+      <ul class="trend-list">
         <% @insights[:monthly_trends].each do |month_data| %>
-          <li>
-            <span><%= month_data[:month].strftime("%b %Y") %></span>
-            <span>
+          <li class="trend-row">
+            <span class="trend-month"><%= month_data[:month].strftime("%b %y") %></span>
+            <span class="trend-bars" aria-hidden="true">
+              <i class="trend-bar trend-income" style="width: <%= trend_max.zero? ? 0 : (month_data[:income].abs.to_f / trend_max * 100).round %>%"></i>
+              <i class="trend-bar trend-expense" style="width: <%= trend_max.zero? ? 0 : (month_data[:expense].abs.to_f / trend_max * 100).round %>%"></i>
+            </span>
+            <span class="trend-amounts">
               <span class="amount positive"><%= display_money(month_data[:income]) %></span>
               <span class="amount negative"><%= display_money(month_data[:expense]) %></span>
             </span>
@@ -57,7 +71,6 @@
     <% end %>
   </section>
 
-  <!-- Expense Breakdown -->
   <section class="card">
     <h2>Top Expenses</h2>
     <% if @insights[:expense_by_category].empty? %>
@@ -74,7 +87,6 @@
     <% end %>
   </section>
 
-  <!-- Income Breakdown -->
   <section class="card">
     <h2>Income Sources</h2>
     <% if @insights[:income_by_category].empty? %>

@@ -1,6 +1,18 @@
 <nav class="bottom-navigation">
-  <%= link_to "Home", budget_path(month: month), class: link_class("budgets", "show") %>
-  <%= link_to "Insights", insights_budget_path(month: month), class: link_class("budgets", "insights") %>
-  <%= link_to "Transactions", transactions_path(month: month), class: link_class("transactions") %>
-  <%= link_to "Accounts", accounts_path(month: month), class: link_class("accounts") %>
+  <div class="nav-brand">
+    <span class="brand-mark" aria-hidden="true">S</span>
+    <span>Simple Budget</span>
+  </div>
+  <%= link_to budget_path(month: month), class: link_class("budgets", "show") do %>
+    <span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span>
+  <% end %>
+  <%= link_to insights_budget_path(month: month), class: link_class("budgets", "insights") do %>
+    <span class="nav-icon" aria-hidden="true">◷</span><span>Insights</span>
+  <% end %>
+  <%= link_to transactions_path(month: month), class: link_class("transactions") do %>
+    <span class="nav-icon" aria-hidden="true">≡</span><span>Transactions</span>
+  <% end %>
+  <%= link_to accounts_path(month: month), class: link_class("accounts") do %>
+    <span class="nav-icon" aria-hidden="true">▣</span><span>Accounts</span>
+  <% end %>
 </nav>
