@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class BottomNavigationComponent < ViewComponent::Base
   attr_reader :month
 
@@ -7,7 +5,11 @@ class BottomNavigationComponent < ViewComponent::Base
     @month = month.strftime("%Y-%m")
   end
 
-  def link_class(controller)
-    helpers.controller_name == controller ? "active" : nil
+  def link_class(controller, action = nil)
+    if helpers.controller_name == controller
+      if action.nil? || helpers.action_name == action
+        "active"
+      end
+    end
   end
 end

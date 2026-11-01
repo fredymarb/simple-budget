@@ -37,10 +37,24 @@
     </div>
   </section>
 
-  <!-- Monthly Trends Chart -->
+  <!-- Monthly Trends -->
   <section class="card">
     <h2>12-Month Trends</h2>
-    <div class="trends-chart" data-trends="<%= @insights[:monthly_trends].to_json %>"></div>
+    <% if @insights[:monthly_trends].any? %>
+      <ul class="breakdown">
+        <% @insights[:monthly_trends].each do |month_data| %>
+          <li>
+            <span><%= month_data[:month].strftime("%b %Y") %></span>
+            <span>
+              <span class="amount positive"><%= display_money(month_data[:income]) %></span>
+              <span class="amount negative"><%= display_money(month_data[:expense]) %></span>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted">No transaction history available.</p>
+    <% end %>
   </section>
 
   <!-- Expense Breakdown -->

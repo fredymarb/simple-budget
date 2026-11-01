@@ -1,6 +1,6 @@
 <nav class="bottom-navigation">
-  <%= link_to "Home", budget_path(month: month), class: link_class("budgets") %>
-  <%= link_to "Insights", insights_budget_path(month: month), class: link_class("budgets") %>
+  <%= link_to "Home", budget_path(month: month), class: link_class("budgets", "show") %>
+  <%= link_to "Insights", insights_budget_path(month: month), class: link_class("budgets", "insights") %>
   <%= link_to "Transactions", transactions_path(month: month), class: link_class("transactions") %>
   <%= link_to "Accounts", accounts_path(month: month), class: link_class("accounts") %>
 </nav>
