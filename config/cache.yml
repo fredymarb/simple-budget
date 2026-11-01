@@ -12,5 +12,8 @@ test:
   <<: *default
 
 production:
-  database: cache
   <<: *default
+<% unless ENV["SIMPLE_BUDGET_RENDER_DEMO"] == "true" %>
+  database: cache
+<% end %>
+
