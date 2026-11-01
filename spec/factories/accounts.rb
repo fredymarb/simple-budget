@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :account do
     budget { association :budget }
-    name { Faker::Lorem.word }
+    sequence(:name) { |n| "#{Faker::Lorem.word} #{n}" }
   end
 end
