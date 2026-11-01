@@ -8,6 +8,7 @@ class Transaction < ApplicationRecord
   validates :kind, presence: true
   validates :amount_minor, presence: true, numericality: { only_integer: true }
   validates :date, presence: true
+  validates :category, presence: true, unless: :transfer?
   validates :transfer_group_id, presence: true, if: :transfer?
   validates :transfer_group_id, absence: true, unless: :transfer?
 end
