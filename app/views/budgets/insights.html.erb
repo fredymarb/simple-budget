@@ -1,0 +1,85 @@
+<header>
+  <%= render BudgetCalenderComponent.new(month: @month) %>
+</header>
+
+<main>
+  <h1>Insights</h1>
+
+  <!-- Current Month Summary -->
+  <section class="card stat-row">
+    <div class="stat">
+      <span class="label">Income</span>
+      <strong class="amount income"><%= display_money(@insights[:current_month_summary][:income]) %></strong>
+    </div>
+    <div class="stat">
+      <span class="label">Expenses</span>
+      <strong class="amount expense"><%= display_money(@insights[:current_month_summary][:expense].abs) %></strong>
+    </div>
+    <div class="stat">
+      <span class="label">Net</span>
+      <strong class="amount"><%= display_money(@insights[:current_month_summary][:net]) %></strong>
+    </div>
+  </section>
+
+  <!-- Averages and Savings Rate -->
+  <section class="card stat-row">
+    <div class="stat">
+      <span class="label">Avg Monthly Income</span>
+      <strong class="amount income"><%= display_money(@insights[:average_monthly_income]) %></strong>
+    </div>
+    <div class="stat">
+      <span class="label">Avg Monthly Expense</span>
+      <strong class="amount expense"><%= display_money(@insights[:average_monthly_expense]) %></strong>
+    </div>
+    <div class="stat">
+      <span class="label">Savings Rate</span>
+      <strong class="amount"><%= @insights[:savings_rate] %>%</strong>
+    </div>
+  </section>
+
+  <!-- Monthly Trends Chart -->
+  <section class="card">
+    <h2>12-Month Trends</h2>
+    <div class="trends-chart" data-trends="<%= @insights[:monthly_trends].to_json %>"></div>
+  </section>
+
+  <!-- Expense Breakdown -->
+  <section class="card">
+    <h2>Top Expenses</h2>
+    <% if @insights[:expense_by_category].empty? %>
+      <p class="muted">No expenses this month.</p>
+    <% else %>
+      <ul class="breakdown">
+        <% @insights[:expense_by_category].each do |category| %>
+          <li>
+            <span><%= category[:name] %></span>
+            <span class="amount negative"><%= display_money(category[:amount]) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+
+  <!-- Income Breakdown -->
+  <section class="card">
+    <h2>Income Sources</h2>
+    <% if @insights[:income_by_category].empty? %>
+      <p class="muted">No income this month.</p>
+    <% else %>
+      <ul class="breakdown">
+        <% @insights[:income_by_category].each do |category| %>
+          <li>
+            <span><%= category[:name] %></span>
+            <span class="amount positive"><%= display_money(category[:amount]) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+</main>
+
+<%= link_to "+", new_transaction_path, class: "fab", "aria-label": "Add transaction" %>
+
+<footer>
+  <%= render BottomNavigationComponent.new(month: @month) %>
+</footer>
