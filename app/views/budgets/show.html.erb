@@ -4,12 +4,11 @@
 </header>
 
 <main>
-  <section class="card balance-card">
-    <span class="label">Total Balance</span>
-    <strong class="amount"><%= display_money(@total_balance) %></strong>
-  </section>
-
   <section class="card stat-row">
+    <div class="stat">
+      <span class="label">Total Balance</span>
+      <strong class="amount"><%= display_money(@total_balance) %></strong>
+    </div>
     <div class="stat">
       <span class="label">Income</span>
       <strong class="amount income"><%= display_money(@monthly_income) %></strong>

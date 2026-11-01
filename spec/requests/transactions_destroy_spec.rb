@@ -50,7 +50,7 @@ RSpec.describe "Transactions destroy and edge cases", type: :request do
 
   describe "POST /transactions with invalid data" do
     it "re-renders the new form with an error" do
-      post transactions_path, params: { transaction: { kind: "income", amount_minor: "100", date: "2026-10-01",
+      post transactions_path, params: { transaction: { kind: "income", amount: "1.00", date: "2026-10-01",
                                                        account_id: account.id } }
 
       expect(response).to have_http_status(:unprocessable_content)
@@ -61,7 +61,7 @@ RSpec.describe "Transactions destroy and edge cases", type: :request do
     it "re-renders the edit form" do
       transaction = budget.transactions.first
 
-      patch transaction_path(transaction), params: { transaction: { amount_minor: "abc", date: "not-a-date",
+      patch transaction_path(transaction), params: { transaction: { amount: "abc", date: "not-a-date",
                                                                     account_id: account.id,
                                                                     category_id: transaction.category_id } }
 

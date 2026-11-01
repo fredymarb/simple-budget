@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Transactions::Save do
-  let(:budget) { create(:budget) }
+  let(:budget) { create(:budget, currency: "USD") }
   let(:checking) { create(:account, budget: budget, name: "Checking") }
   let(:savings) { create(:account, budget: budget, name: "Savings") }
   let(:category) { create(:category, budget: budget) }
@@ -16,16 +16,33 @@ RSpec.describe Transactions::Save do
 
   describe "creating" do
     it "creates an income transaction and reports the month" do
-      result = save(kind: "income", account_id: checking.id, category_id: category.id, amount_minor: "500", date: "2026-10-25")
+      result = save(kind: "income", account_id: checking.id, category_id: category.id, amount: "5.00", date: "2026-10-25")
 
       expect(result).to be_success
       expect(result.month).to eq("2026-10")
       expect(result.notice).to eq("Transaction was successfully created.")
-      expect(result.transaction).to be_persisted
+      expect(result.transaction).to have_attributes(amount_minor: 500)
+    end
+
+    it "converts a decimal amount to minor units" do
+      result = save(kind: "income", account_id: checking.id, category_id: category.id,
+                    amount: "12.34", date: "2026-10-25")
+
+      expect(result).to be_success
+      expect(result.transaction.amount_minor).to eq(1_234)
+    end
+
+    it "rejects an invalid amount" do
+      result = save(kind: "income", account_id: checking.id, category_id: category.id,
+                    amount: "abc", date: "2026-10-25")
+
+      expect(result).not_to be_success
+      expect(result.error).to eq("Enter a valid amount.")
+      expect(result.submitted).to include(amount: "abc")
     end
 
     it "rejects an unknown kind" do
-      result = save(kind: "starting_balance", account_id: checking.id, amount_minor: "500", date: "2026-10-25")
+      result = save(kind: "starting_balance", account_id: checking.id, amount: "5.00", date: "2026-10-25")
 
       expect(result).not_to be_success
       expect(result.error).to eq("Select a valid transaction type.")
@@ -36,7 +53,7 @@ RSpec.describe Transactions::Save do
       category
       result = nil
       expect {
-        result = save(kind: "income", account_id: foreign.id, category_id: category.id, amount_minor: "500", date: "2026-10-25")
+        result = save(kind: "income", account_id: foreign.id, category_id: category.id, amount: "5.00", date: "2026-10-25")
       }.not_to change { Transaction.count }
 
       expect(result).not_to be_success
@@ -44,7 +61,7 @@ RSpec.describe Transactions::Save do
 
     it "creates both legs of a transfer" do
       result = save(kind: "transfer", source_account_id: checking.id, destination_account_id: savings.id,
-                    amount_minor: "700", date: "2026-10-25")
+                    amount: "7.00", date: "2026-10-25")
 
       expect(result).to be_success
       expect(result.notice).to eq("Transfer completed successfully.")
@@ -53,11 +70,11 @@ RSpec.describe Transactions::Save do
 
     it "fails a transfer between the same account and keeps submitted values" do
       result = save(kind: "transfer", source_account_id: checking.id, destination_account_id: checking.id,
-                    amount_minor: "700", date: "2026-10-25")
+                    amount: "7.00", date: "2026-10-25")
 
       expect(result).not_to be_success
       expect(result.error).to eq("Source and destination accounts must differ")
-      expect(result.submitted).to include(amount_minor: "700", date: "2026-10-25")
+      expect(result.submitted).to include(amount: "7.00", date: "2026-10-25")
     end
 
     it "fails a transfer with an invalid date" do
@@ -67,7 +84,7 @@ RSpec.describe Transactions::Save do
       result = nil
       expect {
         result = save(kind: "transfer", source_account_id: checking.id, destination_account_id: savings.id,
-                      amount_minor: "700", date: "not-a-date")
+                      amount: "7.00", date: "not-a-date")
       }.not_to change { Transaction.count }
 
       expect(result).not_to be_success
@@ -79,7 +96,7 @@ RSpec.describe Transactions::Save do
       transaction = create(:transaction, budget: budget, account: checking, category: category, kind: :expense)
 
       result = save(transaction: transaction, kind: "transfer", account_id: checking.id, category_id: category.id,
-                    amount_minor: "900", date: "2026-10-26")
+                    amount: "9.00", date: "2026-10-26")
 
       expect(result).to be_success
       expect(transaction.reload).to have_attributes(kind: "expense", amount_minor: 900)
@@ -90,7 +107,7 @@ RSpec.describe Transactions::Save do
                                         date: Date.new(2026, 10, 1)).call
 
       result = save(transaction: outgoing, source_account_id: savings.id, destination_account_id: checking.id,
-                    amount_minor: "300", date: "2026-10-02")
+                    amount: "3.00", date: "2026-10-02")
 
       expect(result).to be_success
       expect(result.notice).to eq("Transfer was successfully updated.")
@@ -103,7 +120,7 @@ RSpec.describe Transactions::Save do
                                         date: Date.new(2026, 10, 1)).call
 
       result = save(transaction: outgoing, source_account_id: checking.id, destination_account_id: "",
-                    amount_minor: "300", date: "2026-10-02")
+                    amount: "3.00", date: "2026-10-02")
 
       expect(result).not_to be_success
       expect(result.error).to eq("Both accounts must exist.")

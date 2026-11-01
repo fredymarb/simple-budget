@@ -14,6 +14,8 @@ RSpec.describe TransactionFormComponent, type: :component do
     render_form(budget.transactions.new(kind: :expense, date: Date.current))
 
     expect(page).to have_select("Type", options: %w[Income Expense Transfer])
+    expect(page).to have_field("Amount", type: "text", placeholder: "0.00")
+    expect(page).to have_css('input[name="transaction[amount]"][inputmode="decimal"]')
     expect(page).to have_button("Create Transaction")
     expect(page).to have_css("[data-controller='transaction-form']")
   end
@@ -50,6 +52,9 @@ RSpec.describe TransactionFormComponent, type: :component do
 
     expect(page).to have_field("From account", with: checking.id.to_s)
     expect(page).to have_field("To account", with: savings.id.to_s)
-    expect(page).to have_field("Amount (in minor units)", with: "800")
+    expect(page).to have_field(
+      "Amount",
+      with: Money.minor_to_decimal(800, exponent: Money::EXPONENTS[budget.currency])
+    )
   end
 end

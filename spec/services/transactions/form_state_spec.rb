@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Transactions::FormState do
-  let(:budget) { create(:budget) }
+  let(:budget) { create(:budget, currency: "USD") }
   let(:checking) { create(:account, budget: budget, name: "Checking") }
   let(:savings) { create(:account, budget: budget, name: "Savings") }
 
@@ -30,10 +30,10 @@ RSpec.describe Transactions::FormState do
 
   context "after a failed submission" do
     it "redisplays the submitted values and error" do
-      submitted = { amount_minor: "12", date: "2026-10-09", source_account_id: "1", destination_account_id: "2" }
+      submitted = { amount: "12.00", date: "2026-10-09", source_account_id: "1", destination_account_id: "2" }
       result = state(error: "Nope", submitted: submitted)
 
-      expect(result).to have_attributes(amount_value: "12", date_value: "2026-10-09",
+      expect(result).to have_attributes(amount_value: "12.00", date_value: "2026-10-09",
                                         source_account_id: "1", destination_account_id: "2", error: "Nope")
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Transactions::FormState do
     it "loads both accounts and the absolute amount" do
       result = state(transaction: outgoing)
 
-      expect(result.amount_value).to eq(700)
+      expect(result.amount_value).to eq("7.00")
       expect(result.source_account_id).to eq(checking.id)
       expect(result.destination_account_id).to eq(savings.id)
       expect(result.error).to be_nil
@@ -67,6 +67,6 @@ RSpec.describe Transactions::FormState do
     transaction = create(:transaction, budget: budget, account: checking)
 
     expect(state(transaction: transaction).source_account_id).to be_nil
-    expect(state(transaction: transaction).amount_value).to eq(10_000)
+    expect(state(transaction: transaction).amount_value).to eq("100.00")
   end
 end

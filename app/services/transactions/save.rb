@@ -2,7 +2,7 @@ module Transactions
   # Creates or updates a transaction (income, expense or transfer) from form params.
   class Save
     KINDS = %w[income expense transfer].freeze
-    SUBMITTED_KEYS = %i[amount_minor date source_account_id destination_account_id].freeze
+    SUBMITTED_KEYS = %i[amount date source_account_id destination_account_id].freeze
 
     Result = Struct.new(:success, :transaction, :month, :notice, :error, :submitted, keyword_init: true) do
       def success?
@@ -37,10 +37,12 @@ module Transactions
       else
         failure(nil)
       end
+    rescue ArgumentError => e
+      failure(e.message)
     end
 
     def assign_attributes
-      @transaction.assign_attributes(@params.slice(:amount_minor, :date, :memo))
+      @transaction.assign_attributes(@params.slice(:date, :memo).merge(amount_minor: amount_minor))
       @transaction.account = find_account(@params[:account_id])
       @transaction.category = @params[:category_id].present? ? @budget.categories.find_by(id: @params[:category_id]) : nil
     end
@@ -53,7 +55,7 @@ module Transactions
         Transfers::Create.new(
           source_account: source,
           destination_account: destination,
-          amount_minor: @params[:amount_minor],
+          amount_minor: amount_minor,
           date: date,
           memo: @params[:memo]
         ).call
@@ -65,7 +67,7 @@ module Transactions
           transaction: @transaction,
           source_account: source,
           destination_account: destination,
-          amount_minor: @params[:amount_minor],
+          amount_minor: amount_minor,
           date: date,
           memo: @params[:memo]
         ).call
@@ -77,6 +79,19 @@ module Transactions
 
     def find_account(id)
       @budget.accounts.find_by(id: id)
+    end
+
+    def amount_minor
+      raise ArgumentError, "Enter a valid amount." if @params[:amount].blank?
+
+      amount = begin
+        Money.decimal_to_minor(@params[:amount], exponent: Money::EXPONENTS[@budget.currency])
+      rescue ArgumentError, TypeError
+        raise ArgumentError, "Enter a valid amount."
+      end
+      raise ArgumentError, "Enter an amount greater than zero." unless amount.positive?
+
+      amount
     end
 
     def date

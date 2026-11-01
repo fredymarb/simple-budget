@@ -33,12 +33,13 @@
   </div>
 
   <div class="field">
-    <%= form.label :amount_minor, "Amount (in minor units)" %>
-    <%= form.number_field :amount_minor,
+    <%= form.label :amount, "Amount" %>
+    <%= form.text_field :amount,
           value: state.amount_value,
-          min: 1,
-          step: 1,
-          required: true %>
+          inputmode: "decimal",
+          placeholder: "0.00",
+          required: true,
+          autocomplete: "off" %>
   </div>
 
   <div class="field-group" data-transaction-form-target="regularFields">

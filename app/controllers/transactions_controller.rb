@@ -40,7 +40,7 @@ class TransactionsController < ApplicationController
   def transaction_params
     params.require(:transaction)
       .permit(
-        :amount_minor, :kind, :date, :memo,
+        :amount, :kind, :date, :memo,
         :account_id, :category_id, :source_account_id, :destination_account_id
       )
       .to_h

@@ -33,7 +33,7 @@ RSpec.describe "Transactions", type: :request do
             kind: "transfer",
             source_account_id: source_account.id,
             destination_account_id: destination_account.id,
-            amount_minor: "1250",
+            amount: "12.50",
             date: "2026-10-25",
             memo: "Savings"
           }
@@ -57,7 +57,7 @@ RSpec.describe "Transactions", type: :request do
             kind: "transfer",
             source_account_id: source_account.id,
             destination_account_id: source_account.id,
-            amount_minor: "1250",
+            amount: "12.50",
             date: "2026-10-25"
           }
         }
@@ -73,7 +73,7 @@ RSpec.describe "Transactions", type: :request do
           kind: "income",
           account_id: source_account.id,
           category_id: category.id,
-          amount_minor: "5000",
+          amount: "50.25",
           date: "2026-10-25"
         }
       }
@@ -83,7 +83,7 @@ RSpec.describe "Transactions", type: :request do
         kind: "income",
         account_id: source_account.id,
         category_id: category.id,
-        amount_minor: 5000
+        amount_minor: 5025
       )
     end
 
@@ -96,7 +96,7 @@ RSpec.describe "Transactions", type: :request do
             kind: "income",
             account_id: foreign_account.id,
             category_id: category.id,
-            amount_minor: "5000",
+            amount: "50.00",
             date: "2026-10-25"
           }
         }
@@ -112,7 +112,7 @@ RSpec.describe "Transactions", type: :request do
             kind: "income",
             account_id: { id: source_account.id },
             category_id: category.id,
-            amount_minor: "5000",
+            amount: "50.00",
             date: "2026-10-25"
           }
         }
@@ -158,7 +158,8 @@ RSpec.describe "Transactions", type: :request do
       expect(response.body).to include('<span class="kind-badge">Transfer</span>')
       expect(response.body).to match(/<option selected="selected" value="#{source_account.id}">Checking/)
       expect(response.body).to match(/<option selected="selected" value="#{destination_account.id}">Savings/)
-      expect(response.body).to include('value="1500"')
+      expect(response.body).to include('name="transaction[amount]"')
+      expect(response.body).to include('value="15.00"')
     end
   end
 
@@ -179,7 +180,7 @@ RSpec.describe "Transactions", type: :request do
         transaction: {
           source_account_id: new_source.id,
           destination_account_id: new_destination.id,
-          amount_minor: "2500",
+          amount: "25.00",
           date: "2026-10-27",
           memo: "Updated transfer"
         }
@@ -207,7 +208,7 @@ RSpec.describe "Transactions", type: :request do
           kind: "transfer",
           account_id: source_account.id,
           category_id: category.id,
-          amount_minor: "3000",
+          amount: "30.00",
           date: "2026-10-28"
         }
       }

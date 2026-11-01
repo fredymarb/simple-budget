@@ -20,7 +20,10 @@ module Transactions
     end
 
     def amount_value
-      @submitted[:amount_minor] || (transaction.amount_minor&.abs if transaction.persisted?)
+      return @submitted[:amount] if @submitted.key?(:amount)
+      return unless transaction.persisted?
+
+      Money.minor_to_decimal(transaction.amount_minor.abs, exponent: Money::EXPONENTS[@budget.currency])
     end
 
     def date_value
