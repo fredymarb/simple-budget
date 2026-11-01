@@ -72,6 +72,9 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Code coverage reports
+  gem "simplecov", require: false
 end
 
 # Use devise for authentication [https://github.com/heartcombo/devise]
