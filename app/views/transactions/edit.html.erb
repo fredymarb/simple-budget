@@ -1,3 +1,10 @@
-<h1>Edit Transaction</h1>
+<header class="page-title">
+  <h1>Edit Transaction</h1>
+  <%= link_to "Cancel", transactions_path, class: "button small secondary" %>
+</header>
 
-<%= render TransactionFormComponent.new(state: @form_state) %>
+<main>
+  <div class="card">
+    <%= render TransactionFormComponent.new(state: @form_state) %>
+  </div>
+</main>

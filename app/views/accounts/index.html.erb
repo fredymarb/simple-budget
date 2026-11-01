@@ -3,17 +3,19 @@
 </header>
 
 <main>
-  <ul>
+  <ul class="row-list">
     <% @accounts.each do |account| %>
+      <% balance = account.transactions.sum(&:amount_minor) %>
       <li>
-        <a href="<%= edit_account_path(account) %>">
-          <%= account.name %>: <%= display_money(account.transactions.sum(&:amount_minor)) %>
-        </a>
+        <%= link_to edit_account_path(account), class: "row-link" do %>
+          <span class="title"><%= account.name %></span>
+          <span class="amount <%= balance.negative? ? "negative" : "positive" %>"><%= display_money(balance) %></span>
+        <% end %>
       </li>
     <% end %>
   </ul>
 
-  <%= link_to "Create New Account", new_account_path %>
+  <%= link_to "Create New Account", new_account_path, class: "button" %>
 </main>
 
 <footer>

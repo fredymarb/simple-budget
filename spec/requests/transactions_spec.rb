@@ -139,7 +139,7 @@ RSpec.describe "Transactions", type: :request do
       get edit_transaction_path(outgoing)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("<strong>Type:</strong> Transfer")
+      expect(response.body).to include('<span class="kind-badge">Transfer</span>')
       expect(response.body).to match(/<option selected="selected" value="#{source_account.id}">Checking/)
       expect(response.body).to match(/<option selected="selected" value="#{destination_account.id}">Savings/)
       expect(response.body).to include('value="1500"')

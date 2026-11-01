@@ -27,7 +27,14 @@
     <% flash.each do |key, message| %>
       <div class="flash <%= key %>"><%= message %></div>
     <% end %>
-    
-    <%= yield %>
+
+    <div class="app-shell <%= "auth" if devise_controller? %>">
+      <% if devise_controller? %>
+        <div class="brand">Simple Budget</div>
+        <main class="card"><%= yield %></main>
+      <% else %>
+        <%= yield %>
+      <% end %>
+    </div>
   </body>
 </html>

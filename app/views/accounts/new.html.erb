@@ -1,12 +1,27 @@
-<h1>New Account Page</h1>
+<header class="page-title">
+  <h1>New Account</h1>
+  <%= link_to "Cancel", accounts_path, class: "button small secondary" %>
+</header>
 
-<%= form_with model: @account do |form| %>
-  <div>
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+<main>
+  <div class="card">
+    <%= form_with model: @account do |form| %>
+      <% if @account.errors.any? %>
+        <div class="form-errors">
+          <ul>
+            <% @account.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <div>
-    <%= form.submit "Add Account" %>
+      <div class="field">
+        <%= form.label :name %>
+        <%= form.text_field :name, required: true %>
+      </div>
+
+      <%= form.submit "Add Account" %>
+    <% end %>
   </div>
-<% end %>
+</main>

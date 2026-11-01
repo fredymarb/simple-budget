@@ -1,9 +1,11 @@
 <li>
-  <%= link_to edit_transaction_path(transaction) do %>
+  <%= link_to edit_transaction_path(transaction), class: "row-link" do %>
     <% if transfer? %>
-      <%= label %> (<%= amount %>)
+      <span class="title"><%= label %></span>
+      <span class="amount neutral"><%= amount %></span>
     <% else %>
-      <%= label %>: <%= amount %>
+      <span class="title"><%= transaction.category.name %></span>
+      <span class="amount <%= transaction.amount_minor.negative? ? "negative" : "positive" %>"><%= amount %></span>
     <% end %>
   <% end %>
 </li>

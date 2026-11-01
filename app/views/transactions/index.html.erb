@@ -1,24 +1,26 @@
-<div class="app-shell">
-  <header>
-    <%= render BudgetCalenderComponent.new(month: @month) %>
-  </header>
+<header>
+  <%= render BudgetCalenderComponent.new(month: @month) %>
+</header>
 
-  <main>
-    <h1>All Transactions</h1>
+<main>
+  <h1>All Transactions</h1>
 
-    <ul>
-      <% @transactions_by_date.each do |date, entries| %>
-        <li>
-          <strong><%= date.strftime("%B %d, %Y") %></strong>
-          <ul>
-            <%= render TransactionListItemComponent.with_collection(entries) %>
-          </ul>
-        </li>
-      <% end %>
-    </ul>
-  </main>
+  <% if @transactions_by_date.empty? %>
+    <p class="empty">No transactions this month.</p>
+  <% end %>
 
-  <footer>
-    <%= render BottomNavigationComponent.new(month: @month) %>
-  </footer>
-</div>
+  <% @transactions_by_date.each do |date, entries| %>
+    <section>
+      <h2 class="date-heading"><%= date.strftime("%B %d, %Y") %></h2>
+      <ul class="row-list">
+        <%= render TransactionListItemComponent.with_collection(entries) %>
+      </ul>
+    </section>
+  <% end %>
+</main>
+
+<%= link_to "+", new_transaction_path(month: @month.strftime("%Y-%m")), class: "fab", "aria-label": "Add transaction" %>
+
+<footer>
+  <%= render BottomNavigationComponent.new(month: @month) %>
+</footer>

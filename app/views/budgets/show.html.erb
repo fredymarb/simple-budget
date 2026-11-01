@@ -1,41 +1,60 @@
+<header>
+  <%= render BudgetCalenderComponent.new(month: @month) %>
+  <%= button_to "Sign Out", destroy_user_session_path, method: :delete %>
+</header>
 
-<div class="app-shell">
-  <header>
-    <%= render BudgetCalenderComponent.new(month: @month) %>
-    <%= button_to "Sign Out", destroy_user_session_path, method: :delete %>
-  </header>
+<main>
+  <section class="card balance-card">
+    <span class="label">Total Balance</span>
+    <strong class="amount"><%= display_money(@total_balance) %></strong>
+  </section>
 
-  <main>
-    <h2>Summary</h2>
+  <section class="card stat-row">
+    <div class="stat">
+      <span class="label">Income</span>
+      <strong class="amount income"><%= display_money(@monthly_income) %></strong>
+    </div>
+    <div class="stat">
+      <span class="label">Expenses</span>
+      <strong class="amount expense"><%= display_money(@monthly_expense.abs) %></strong>
+    </div>
+  </section>
 
-    <p>Total Balance: <%= display_money(@total_balance) %></p>
-    <p>Total Income: <%= display_money(@monthly_income) %></p>
-    <p>Total Expenses: <%= display_money(@monthly_expense.abs) %></p>
-
+  <section class="card">
     <h2>Income</h2>
+    <% if @income_by_category.empty? %>
+      <p class="muted">No income this month.</p>
+    <% else %>
+      <ul class="breakdown">
+        <% @income_by_category.each do |(_id, category_name, _kind), amount| %>
+          <li>
+            <span><%= category_name %></span>
+            <span class="amount positive"><%= display_money(amount) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
 
-    <ul>
-      <% @income_by_category.each do |(_id, category_name, _kind), amount| %>
-        <li>
-          <%= category_name %>: <%= display_money(amount) %>
-        </li>
-      <% end %>
-    </ul>
-
+  <section class="card">
     <h2>Expenses</h2>
+    <% if @expense_by_category.empty? %>
+      <p class="muted">No expenses this month.</p>
+    <% else %>
+      <ul class="breakdown">
+        <% @expense_by_category.each do |(_id, category_name, _kind), amount| %>
+          <li>
+            <span><%= category_name %></span>
+            <span class="amount negative"><%= display_money(amount.abs) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+</main>
 
-    <ul>
-      <% @expense_by_category.each do |(_id, category_name, _kind), amount| %>
-        <li>
-          <%= category_name %>: <%= display_money(amount.abs) %>
-        </li>
-      <% end %>
-    </ul>
+<%= link_to "+", new_transaction_path, class: "fab", "aria-label": "Add transaction" %>
 
-    <%= link_to "Add Transaction", new_transaction_path %>
-  </main>
-
-  <footer>
-    <%= render BottomNavigationComponent.new(month: @month) %>
-  </footer>
-</div>
+<footer>
+  <%= render BottomNavigationComponent.new(month: @month) %>
+</footer>

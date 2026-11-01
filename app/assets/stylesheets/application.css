@@ -1,10 +1,523 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* Simple Budget: mobile-first design system. Plain CSS, served by Propshaft. */
+
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --text: #1c2333;
+  --muted: #667085;
+  --border: #e3e7ef;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-soft: #eef0ff;
+  --income: #12a150;
+  --income-soft: #e6f6ed;
+  --expense: #e0443e;
+  --expense-soft: #fdeceb;
+  --transfer: #0e7fa6;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 4px 14px rgb(16 24 40 / 6%);
+  --nav-height: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1420;
+    --surface: #182032;
+    --text: #e8ecf6;
+    --muted: #96a0b8;
+    --border: #28324a;
+    --primary: #7c83ff;
+    --primary-dark: #9ba0ff;
+    --primary-soft: #222a52;
+    --income: #3ecf7e;
+    --income-soft: #153326;
+    --expense: #ff7a73;
+    --expense-soft: #3a1d1f;
+    --transfer: #4cc2ea;
+    --shadow: 0 1px 2px rgb(0 0 0 / 40%);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  line-height: 1.25;
+}
+
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.05rem; }
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Layout ---------- */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 560px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 1rem 1rem calc(var(--nav-height) + 5rem);
+}
+
+.app-shell > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.app-shell > main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+.card > h2 {
+  margin-bottom: 0.75rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+}
+
+/* ---------- Flash messages ---------- */
+
+.flash {
+  max-width: 528px;
+  margin: 0.75rem auto 0;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+}
+
+.flash.notice { background: var(--income-soft); color: var(--income); }
+.flash.alert { background: var(--expense-soft); color: var(--expense); }
+
+/* ---------- Buttons ---------- */
+
+.button,
+button,
+input[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0.55rem 1.1rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.button:hover,
+button:hover,
+input[type="submit"]:hover {
+  background: var(--primary-dark);
+}
+
+.button.small,
+form.button_to button {
+  min-height: 36px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.button.secondary,
+form.button_to button {
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+}
+
+form input[type="submit"] {
+  width: 100%;
+}
+
+/* ---------- Forms ---------- */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+form.button_to {
+  display: inline-flex;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field p {
+  margin: 0;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--primary);
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-errors {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: var(--expense-soft);
+  color: var(--expense);
+  font-size: 0.95rem;
+}
+
+.form-errors ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+
+.form-errors p {
+  margin: 0;
+}
+
+.kind-badge {
+  display: inline-block;
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ---------- Month switcher ---------- */
+
+.month-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  padding: 0.25rem;
+}
+
+.month-switcher a {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+.month-switcher a:hover {
+  background: var(--primary-soft);
+}
+
+.month-switcher span {
+  font-weight: 700;
+}
+
+/* ---------- Summary ---------- */
+
+.balance-card {
+  background: linear-gradient(135deg, var(--primary), #7a5cf0);
+  border: 0;
+  color: #fff;
+}
+
+.balance-card .label {
+  opacity: 0.85;
+  font-size: 0.9rem;
+}
+
+.balance-card .amount {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.stat .label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.stat .amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.breakdown li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.breakdown li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.breakdown li:last-child {
+  padding-bottom: 0;
+}
+
+.breakdown .amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.amount.positive { color: var(--income); }
+.amount.negative { color: var(--expense); }
+.amount.neutral { color: var(--transfer); }
+
+/* ---------- Lists ---------- */
+
+.date-heading {
+  margin: 0 0.25rem 0.4rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.row-list {
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.row-list li + li {
+  border-top: 1px solid var(--border);
+}
+
+.row-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  color: var(--text);
+}
+
+.row-link:hover {
+  background: var(--primary-soft);
+}
+
+.row-link .title {
+  font-weight: 600;
+}
+
+.row-link .amount {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Bottom navigation ---------- */
+
+.app-shell > footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-navigation {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 560px;
+  height: var(--nav-height);
+  margin: 0 auto;
+}
+
+.bottom-navigation a {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.bottom-navigation a.active {
+  color: var(--primary);
+  box-shadow: inset 0 3px 0 var(--primary);
+}
+
+/* ---------- Floating add button ---------- */
+
+.fab {
+  position: fixed;
+  right: max(1rem, calc(50% - 280px + 1rem));
+  bottom: calc(var(--nav-height) + 1rem + env(safe-area-inset-bottom));
+  z-index: 11;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1.8rem;
+  box-shadow: 0 6px 18px rgb(79 70 229 / 40%);
+}
+
+.fab:hover {
+  background: var(--primary-dark);
+}
+
+/* ---------- Auth pages ---------- */
+
+.auth {
+  justify-content: center;
+  padding-bottom: 1.5rem;
+}
+
+.auth .brand {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.auth .card h2 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.auth .links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.auth .links p {
+  margin: 0;
+}
+
+.auth .field:has(input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}

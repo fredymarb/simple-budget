@@ -23,7 +23,8 @@ RSpec.describe TransactionListItemComponent, type: :component do
 
     render_inline(described_class.new(entry: entry_for(transaction)))
 
-    expect(page).to have_link("Rent: $ -40000", href: "/transactions/#{transaction.id}/edit")
+    expect(page).to have_link("Rent $ -40000", href: "/transactions/#{transaction.id}/edit")
+    expect(page).to have_css(".amount.negative", text: "$ -40000")
   end
 
   it "renders a transfer with both account names and an absolute amount" do
@@ -31,7 +32,8 @@ RSpec.describe TransactionListItemComponent, type: :component do
 
     render_inline(described_class.new(entry: entry_for(outgoing, source: "Default", destination: "Savings")))
 
-    expect(page).to have_link("Transfer: Default → Savings ($ 900)")
+    expect(page).to have_link("Transfer: Default → Savings $ 900")
+    expect(page).to have_css(".amount.neutral", text: "$ 900")
   end
 
   it "falls back when account names are unknown" do
