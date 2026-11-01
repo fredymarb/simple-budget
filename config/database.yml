@@ -87,9 +87,14 @@ test:
 production:
   primary: &primary_production
     <<: *default
+<% if ENV["SIMPLE_BUDGET_RENDER_DEMO"] == "true" %>
+    url: <%= ENV.fetch("DATABASE_URL") %>
+<% else %>
     database: simple_budget_production
     username: simple_budget
     password: <%= ENV["SIMPLE_BUDGET_DATABASE_PASSWORD"] %>
+<% end %>
+<% unless ENV["SIMPLE_BUDGET_RENDER_DEMO"] == "true" %>
   cache:
     <<: *primary_production
     database: simple_budget_production_cache
@@ -102,3 +107,4 @@ production:
     <<: *primary_production
     database: simple_budget_production_cable
     migrations_paths: db/cable_migrate
+<% end %>

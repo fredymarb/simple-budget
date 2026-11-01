@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: simple-budget
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+    envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: SIMPLE_BUDGET_RENDER_DEMO
+        value: "true"
+      - key: DATABASE_URL
+        sync: false
