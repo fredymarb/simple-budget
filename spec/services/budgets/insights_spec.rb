@@ -49,7 +49,7 @@ RSpec.describe Budgets::Insights do
 
     trends = insights[:monthly_trends]
     expect(trends.length).to eq(12)
-    
+
     current = trends.find { |t| t[:month] == Date.new(2026, 10, 1) }
     expect(current).to eq(month: Date.new(2026, 10, 1), income: 100_000, expense: -10_000)
 

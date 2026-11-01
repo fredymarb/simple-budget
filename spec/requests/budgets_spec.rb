@@ -20,7 +20,7 @@ RSpec.describe "Budgets", type: :request do
     it "shows current month summary" do
       create(:transaction, :income, budget: budget, account: account, category: category,
                                     amount_minor: 100_000, date: Date.current)
-      
+
       get budget_path
       expect(response.body).to include("100")
     end
