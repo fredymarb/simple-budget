@@ -15,6 +15,12 @@ and the dashboard summarizes balances and monthly income and expenses.
 New users receive a starter budget with a default account, categories, and sample
 transactions.
 
+## Try it out
+
+Visit the [live Simple Budget app](https://simple-budget-ouo9.onrender.com/) and
+sign up to explore your personal budget. New accounts include a starter budget
+with sample transactions.
+
 ## Requirements
 
 - Ruby 4.0.9 (see `.ruby-version`)
@@ -70,17 +76,3 @@ The included `Dockerfile` builds a production image. See its comments and
 deployments need a PostgreSQL database and the Rails master key supplied through
 `RAILS_MASTER_KEY`; the database password is read from
 `SIMPLE_BUDGET_DATABASE_PASSWORD`.
-
-### Render demo deployment
-
-The root `render.yaml` defines a free Render web service and connects to an
-existing PostgreSQL database. Create a Blueprint in Render from this repository
-and provide `RAILS_MASTER_KEY` and the database's internal connection URL
-(`DATABASE_URL`) when prompted. Get the master key from `config/master.key` in
-a trusted local environment; do not commit or share it. The web service and
-database must be in the same Render region.
-
-This Blueprint is for temporary demos only: Render's free PostgreSQL database
-expires after 30 days, and the free web service may spin down when idle. The
-demo uses in-memory caching and async jobs/cable instead of the additional
-Solid database connections configured for persistent deployments.
