@@ -1,0 +1,92 @@
+<%= form_with model: @transaction,
+      data: {
+        controller: "transaction-form",
+        transaction_form_kind_value: @transaction.kind
+      } do |form| %>
+  <% if @form_error.present? %>
+    <p role="alert"><%= @form_error %></p>
+  <% end %>
+
+  <% if @transaction.errors.any? %>
+    <div role="alert">
+      <ul>
+        <% @transaction.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <% if @transaction.new_record? %>
+      <%= form.label :kind, "Type" %>
+      <%= form.select :kind,
+            [["Income", "income"], ["Expense", "expense"], ["Transfer", "transfer"]],
+            {},
+            data: {
+              transaction_form_target: "kind",
+              action: "change->transaction-form#update"
+            } %>
+    <% else %>
+      <strong>Type:</strong> <%= @transaction.kind.humanize %>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :amount_minor, "Amount (in minor units)" %>
+    <%= form.number_field :amount_minor,
+          value: @form_amount_value || (@transaction.amount_minor&.abs unless @transaction.new_record?),
+          min: 1,
+          step: 1,
+          required: true %>
+  </div>
+
+  <div data-transaction-form-target="regularFields">
+    <div>
+      <%= form.label :account_id, "Account" %>
+      <%= form.collection_select :account_id, @accounts, :id, :name,
+            { prompt: "Select an account" },
+            { required: !@transaction.transfer?, data: { transaction_form_target: "account" } } %>
+    </div>
+
+    <div data-transaction-form-target="categoryFields">
+      <%= form.label :category_id, "Category" %>
+      <%= form.collection_select :category_id, @categories, :id, :name,
+            { prompt: "Select a category" },
+            { required: !@transaction.transfer?, data: { transaction_form_target: "category" } } %>
+    </div>
+  </div>
+
+  <div data-transaction-form-target="transferFields">
+    <div>
+      <%= label_tag "transaction_source_account_id", "From account" %>
+      <%= select_tag "transaction[source_account_id]",
+            options_from_collection_for_select(@accounts, :id, :name, @transfer_source_account_id),
+            include_blank: "Select an account",
+            required: @transaction.transfer?,
+            data: { transaction_form_target: "sourceAccount" } %>
+    </div>
+    <div>
+      <%= label_tag "transaction_destination_account_id", "To account" %>
+      <%= select_tag "transaction[destination_account_id]",
+            options_from_collection_for_select(@accounts, :id, :name, @transfer_destination_account_id),
+            include_blank: "Select an account",
+            required: @transaction.transfer?,
+            data: { transaction_form_target: "destinationAccount" } %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :date %>
+    <%= form.date_field :date, value: @form_date_value || @transaction.date, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :memo %>
+    <%= form.text_field :memo %>
+  </div>
+
+  <div>
+    <%= form.submit @transaction.new_record? ? "Create Transaction" : "Update Transaction" %>
+  </div>
+<% end %>

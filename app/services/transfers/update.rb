@@ -1,23 +1,30 @@
 module Transfers
   class Update
-    def initialize(transaction:, amount_minor:, date:, memo: nil)
+    def initialize(transaction:, amount_minor:, date:, memo: nil, source_account: nil, destination_account: nil)
       @transaction = transaction
       @amount_minor = parse_amount_minor(amount_minor)
-      @date = date
+      @date = parse_date(date)
       @memo = memo
+      @source_account = source_account
+      @destination_account = destination_account
     end
 
     def call
       validate!
 
       ActiveRecord::Base.transaction do
-        transfer_transactions.each do |transaction|
-          transaction.update!(
-            amount_minor: transaction == outgoing_transaction ? -@amount_minor : @amount_minor,
-            date: @date,
-            memo: @memo
-          )
-        end
+        outgoing_transaction.update!(
+          account: @source_account,
+          amount_minor: -@amount_minor,
+          date: @date,
+          memo: @memo
+        )
+        incoming_transaction.update!(
+          account: @destination_account,
+          amount_minor: @amount_minor,
+          date: @date,
+          memo: @memo
+        )
       end
 
       transfer_transactions
@@ -40,6 +47,10 @@ module Transfers
       transfer_transactions.find { |transaction| transaction.amount_minor.negative? }
     end
 
+    def incoming_transaction
+      transfer_transactions.find { |transaction| transaction.amount_minor.positive? }
+    end
+
     def validate!
       unless @transaction.persisted? && @transaction.transfer?
         raise ArgumentError, "Transaction must be a persisted transfer"
@@ -53,6 +64,21 @@ module Transfers
              transfer_transactions.count { |t| t.amount_minor.negative? } == 1 &&
              transfer_transactions.count { |t| t.amount_minor.positive? } == 1
         raise ArgumentError, "Transfer must have exactly two valid transaction records"
+      end
+
+      @source_account ||= outgoing_transaction.account
+      @destination_account ||= incoming_transaction.account
+
+      unless @source_account&.persisted? && @destination_account&.persisted?
+        raise ArgumentError, "Both accounts must exist"
+      end
+
+      if @source_account.id == @destination_account.id
+        raise ArgumentError, "Source and destination accounts must differ"
+      end
+
+      unless [ @source_account, @destination_account ].all? { |account| account.budget_id == @transaction.budget_id }
+        raise ArgumentError, "Accounts must belong to the same budget"
       end
 
       unless @amount_minor.positive?
@@ -75,6 +101,14 @@ module Transfers
       end
     rescue ArgumentError, TypeError
       raise ArgumentError, "Amount must be an integer in minor units"
+    end
+
+    def parse_date(value)
+      return value if value.is_a?(Date)
+
+      Date.iso8601(value)
+    rescue Date::Error, TypeError
+      nil
     end
   end
 end

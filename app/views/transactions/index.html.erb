@@ -12,10 +12,20 @@
           <strong><%= date.strftime("%B %d, %Y") %></strong>
           <ul>
             <% transactions.each do |transaction| %>
+              <% next if transaction.transfer? && transaction.amount_minor.positive? %>
               <li>
-                <a href="<%= edit_transaction_path(transaction) %>">
-                  [<%= transaction.category.name %> : <%= display_money(transaction.amount_minor) %>]
-                </a>
+                <% if transaction.transfer? %>
+                  <% accounts = @transfer_accounts[transaction.transfer_group_id] || {} %>
+                  <%= link_to edit_transaction_path(transaction) do %>
+                    Transfer: <%= accounts[:source] || transaction.account.name %> →
+                    <%= accounts[:destination] || "Unknown account" %>
+                    (<%= display_money(transaction.amount_minor.abs) %>)
+                  <% end %>
+                <% else %>
+                  <%= link_to edit_transaction_path(transaction) do %>
+                    <%= transaction.category.name %>: <%= display_money(transaction.amount_minor) %>
+                  <% end %>
+                <% end %>
               </li>
             <% end %>
           </ul>
