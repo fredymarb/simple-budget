@@ -30,6 +30,9 @@
 
 /public/assets
 
+# Local deployment notes.
+/render_deploy.md
+
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
