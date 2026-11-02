@@ -1044,7 +1044,13 @@ h2 {
 
 .auth {
   justify-content: center;
+  width: 100%;
+  max-width: 500px;
   padding-bottom: 1.5rem;
+}
+
+.auth > main {
+  flex: none;
 }
 
 .auth .brand {
